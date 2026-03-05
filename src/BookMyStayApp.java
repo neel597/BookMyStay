@@ -1,65 +1,74 @@
-abstract class Room {
-    private String roomType;
-    private int numberOfBeds;
-    private double pricePerNight;
+/**
+ * UseCase3InventorySetup.java
+ *
+ * This class demonstrates centralized room inventory management
+ * using a HashMap for the Hotel Booking Management System.
+ * It replaces scattered availability variables with a single source of truth.
+ *
+ * @author YourName
+ * @version 3.1
+ */
 
-    // Constructor
-    public Room(String roomType, int numberOfBeds, double pricePerNight) {
-        this.roomType = roomType;
-        this.numberOfBeds = numberOfBeds;
-        this.pricePerNight = pricePerNight;
+import java.util.HashMap;
+import java.util.Map;
+
+// Inventory class encapsulating room availability logic
+class RoomInventory {
+    private Map<String, Integer> inventory;
+
+    // Constructor initializes inventory with room types and counts
+    public RoomInventory() {
+        inventory = new HashMap<>();
+        inventory.put("Single Room", 5);
+        inventory.put("Double Room", 3);
+        inventory.put("Suite Room", 2);
     }
 
-    public void displayRoomDetails() {
-        System.out.println("Room Type: " + roomType);
-        System.out.println("Beds: " + numberOfBeds);
-        System.out.println("Price per Night: $" + pricePerNight);
+    // Method to get availability of a specific room type
+    public int getAvailability(String roomType) {
+        return inventory.getOrDefault(roomType, 0);
+    }
+
+    // Method to update availability (e.g., after booking or cancellation)
+    public void updateAvailability(String roomType, int newCount) {
+        if (inventory.containsKey(roomType)) {
+            inventory.put(roomType, newCount);
+        } else {
+            System.out.println("Room type not found in inventory.");
+        }
+    }
+
+    // Method to display current inventory state
+    public void displayInventory() {
+        System.out.println("=== Current Room Inventory ===");
+        for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
+            System.out.println(entry.getKey() + " - Available: " + entry.getValue());
+        }
     }
 }
 
-class SingleRoom extends Room {
-    public SingleRoom() {
-        super("Single Room", 1, 100.0);
-    }
-}
-
-class DoubleRoom extends Room {
-    public DoubleRoom() {
-        super("Double Room", 2, 180.0);
-    }
-}
-class SuiteRoom extends Room {
-    public SuiteRoom() {
-        super("Suite Room", 3, 300.0);
-    }
-}
-
+// Application entry point
 public class BookMyStayApp {
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Hotel Booking System!");
         System.out.println("Application: Book My Stay");
-        System.out.println("Version: 2.1\n");
+        System.out.println("Version: 3.1\n");
 
-        Room single = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suite = new SuiteRoom();
+        // Initialize centralized inventory
+        RoomInventory inventory = new RoomInventory();
 
-        // Static availability variables
-        int singleRoomAvailability = 5;
-        int doubleRoomAvailability = 3;
-        int suiteRoomAvailability = 2;
+        // Display initial inventory state
+        inventory.displayInventory();
 
-        // Display room details and availability
-        System.out.println("=== Room Details & Availability ===");
-        single.displayRoomDetails();
-        System.out.println("Available: " + singleRoomAvailability + "\n");
+        // Example update: booking reduces availability
+        System.out.println("\nBooking one Single Room...");
+        int currentSingle = inventory.getAvailability("Single Room");
+        inventory.updateAvailability("Single Room", currentSingle - 1);
 
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available: " + doubleRoomAvailability + "\n");
+        // Display updated inventory state
+        inventory.displayInventory();
 
-        suite.displayRoomDetails();
-        System.out.println("Available: " + suiteRoomAvailability + "\n");
-
+        // Program terminates after showing inventory updates
     }
 }
