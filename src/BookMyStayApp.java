@@ -1,65 +1,71 @@
-abstract class Room {
+import java.util.LinkedList;
+import java.util.Queue;
+
+// Reservation class representing a guest’s booking intent
+class Reservation {
+    private String guestName;
     private String roomType;
-    private int numberOfBeds;
-    private double pricePerNight;
 
-    // Constructor
-    public Room(String roomType, int numberOfBeds, double pricePerNight) {
+    public Reservation(String guestName, String roomType) {
+        this.guestName = guestName;
         this.roomType = roomType;
-        this.numberOfBeds = numberOfBeds;
-        this.pricePerNight = pricePerNight;
     }
 
-    public void displayRoomDetails() {
-        System.out.println("Room Type: " + roomType);
-        System.out.println("Beds: " + numberOfBeds);
-        System.out.println("Price per Night: $" + pricePerNight);
+    public String getGuestName() {
+        return guestName;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void displayReservation() {
+        System.out.println("Guest: " + guestName + " | Requested Room: " + roomType);
     }
 }
 
-class SingleRoom extends Room {
-    public SingleRoom() {
-        super("Single Room", 1, 100.0);
+// Booking Request Queue class
+class BookingRequestQueue {
+    private Queue<Reservation> requestQueue;
+
+    public BookingRequestQueue() {
+        requestQueue = new LinkedList<>();
+    }
+
+    // Add a new reservation request to the queue
+    public void addRequest(Reservation reservation) {
+        requestQueue.add(reservation);
+        System.out.println("Request added for " + reservation.getGuestName());
+    }
+
+    // Display all queued requests (FIFO order)
+    public void displayRequests() {
+        System.out.println("\n=== Booking Requests in Queue (FIFO) ===");
+        for (Reservation r : requestQueue) {
+            r.displayReservation();
+        }
     }
 }
 
-class DoubleRoom extends Room {
-    public DoubleRoom() {
-        super("Double Room", 2, 180.0);
-    }
-}
-class SuiteRoom extends Room {
-    public SuiteRoom() {
-        super("Suite Room", 3, 300.0);
-    }
-}
-
+// Application entry point
 public class BookMyStayApp {
 
     public static void main(String[] args) {
         System.out.println("Welcome to the Hotel Booking System!");
         System.out.println("Application: Book My Stay");
-        System.out.println("Version: 2.1\n");
+        System.out.println("Version: 5.1\n");
 
-        Room single = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suite = new SuiteRoom();
+        // Initialize booking request queue
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        // Static availability variables
-        int singleRoomAvailability = 5;
-        int doubleRoomAvailability = 3;
-        int suiteRoomAvailability = 2;
+        // Guests submit booking requests
+        bookingQueue.addRequest(new Reservation("Alice", "Single Room"));
+        bookingQueue.addRequest(new Reservation("Bob", "Double Room"));
+        bookingQueue.addRequest(new Reservation("Charlie", "Suite Room"));
 
-        // Display room details and availability
-        System.out.println("=== Room Details & Availability ===");
-        single.displayRoomDetails();
-        System.out.println("Available: " + singleRoomAvailability + "\n");
+        // Display queued requests (FIFO order preserved)
+        bookingQueue.displayRequests();
 
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available: " + doubleRoomAvailability + "\n");
-
-        suite.displayRoomDetails();
-        System.out.println("Available: " + suiteRoomAvailability + "\n");
-
+        // Program terminates after showing queued requests
     }
 }
