@@ -1,5 +1,3 @@
-// File: UseCase11ConcurrentBookingSimulation.java
-
 import java.util.*;
 
 // Reservation class
