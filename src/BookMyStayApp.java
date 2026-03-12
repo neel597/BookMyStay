@@ -1,5 +1,3 @@
-// File: UseCase12DataPersistenceRecovery.java
-
 import java.io.*;
 import java.util.*;
 
