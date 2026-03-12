@@ -1,5 +1,3 @@
-// File: UseCase10BookingCancellation.java
-
 import java.util.*;
 
 // Reservation class
